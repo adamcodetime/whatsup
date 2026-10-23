@@ -238,6 +238,7 @@ async function sendMessage(event) {
 }
 
 async function handleVerificationIfNeeded(promptUser = true) {
+<<<<<<< HEAD
     let accountUser = currentSessionUser;
     if (!accountUser) {
         const accountResponse = await fetch(`${API_BASE_URL}/me`, {
@@ -245,6 +246,13 @@ async function handleVerificationIfNeeded(promptUser = true) {
             credentials: "include",
         });
         const account = await readResponseBody(accountResponse);
+=======
+    const accountResponse = await fetch(`${API_BASE_URL}/me`, {
+        method: "GET",
+        credentials: "include",
+    });
+    const account = await readResponseBody(accountResponse);
+>>>>>>> 1b744f17620d025472f821edad9f4c1862dec1e8
 
         if (!accountResponse.ok) {
             throw new Error(getApiError(account, "Unable to check your email verification status."));
