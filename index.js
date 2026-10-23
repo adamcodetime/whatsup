@@ -237,7 +237,7 @@ async function sendMessage(event) {
     }
 }
 
-async function promptVerificationIfNeeded() {
+async function handleVerificationIfNeeded(promptUser = true) {
     const accountResponse = await fetch(`${API_BASE_URL}/me`, {
         method: "GET",
         credentials: "include",
@@ -252,20 +252,23 @@ async function promptVerificationIfNeeded() {
         return false;
     }
 
-    const dialog = document.querySelector("#verificationDialog");
-    if (!dialog) {
-        throw new Error("The email verification prompt is unavailable.");
+    let shouldSendEmail = true;
+    if (promptUser) {
+        const dialog = document.querySelector("#verificationDialog");
+        if (!dialog) {
+            throw new Error("The email verification prompt is unavailable.");
+        }
+
+        shouldSendEmail = await new Promise((resolve) => {
+            const handleClose = () => {
+                dialog.removeEventListener("close", handleClose);
+                resolve(dialog.returnValue === "send");
+            };
+
+            dialog.addEventListener("close", handleClose);
+            dialog.showModal();
+        });
     }
-
-    const shouldSendEmail = await new Promise((resolve) => {
-        const handleClose = () => {
-            dialog.removeEventListener("close", handleClose);
-            resolve(dialog.returnValue === "send");
-        };
-
-        dialog.addEventListener("close", handleClose);
-        dialog.showModal();
-    });
 
     if (!shouldSendEmail) {
         return false;
@@ -488,7 +491,7 @@ async function setupPage() {
                     );
                 }
 
-                await promptVerificationIfNeeded();
+                await handleVerificationIfNeeded();
                 window.location.replace("index.html");
             } catch (error) {
                 showMessage(error.message || "Registration failed. Please try again.");
@@ -527,7 +530,7 @@ async function setupPage() {
                     throw new Error(getApiError(body, "Login failed."));
                 }
 
-                await promptVerificationIfNeeded();
+                await handleVerificationIfNeeded(false);
                 window.location.replace("index.html");
             } catch (error) {
                 showMessage(error.message || "Login failed. Please try again.");
