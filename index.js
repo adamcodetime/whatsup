@@ -1,4 +1,4 @@
-const API_BASE_URL = `http://whatsup-private-messaging.adam-towfek.workers.dev`;
+const API_BASE_URL = `https://whatsup-private-messaging.adam-towfek.workers.dev`;
 let currentSessionUser = null;
 
 function redirectToLogin() {
