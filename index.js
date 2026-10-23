@@ -1,4 +1,4 @@
-const API_BASE_URL = `http://127.0.0.1:8787`;
+const API_BASE_URL = `https://whatsup-private-messaging.adam-towfek.workers.dev`;
 let currentSessionUser = null;
 
 function redirectToLogin() {
@@ -237,35 +237,44 @@ async function sendMessage(event) {
     }
 }
 
-async function promptVerificationIfNeeded() {
-    const accountResponse = await fetch(`${API_BASE_URL}/me`, {
-        method: "GET",
-        credentials: "include",
-    });
-    const account = await readResponseBody(accountResponse);
+async function handleVerificationIfNeeded(promptUser = true) {
+    let accountUser = currentSessionUser;
+    if (!accountUser) {
+        const accountResponse = await fetch(`${API_BASE_URL}/me`, {
+            method: "GET",
+            credentials: "include",
+        });
+        const account = await readResponseBody(accountResponse);
 
-    if (!accountResponse.ok) {
-        throw new Error(getApiError(account, "Unable to check your email verification status."));
+        if (!accountResponse.ok) {
+            throw new Error(getApiError(account, "Unable to check your email verification status."));
+        }
+
+        accountUser = account?.user || account;
+        currentSessionUser = accountUser;
     }
 
-    if (account?.user?.verified !== 0) {
+    if (accountUser?.verified !== false && accountUser?.verified !== 0) {
         return false;
     }
 
-    const dialog = document.querySelector("#verificationDialog");
-    if (!dialog) {
-        throw new Error("The email verification prompt is unavailable.");
+    let shouldSendEmail = true;
+    if (promptUser) {
+        const dialog = document.querySelector("#verificationDialog");
+        if (!dialog) {
+            throw new Error("The email verification prompt is unavailable.");
+        }
+
+        shouldSendEmail = await new Promise((resolve) => {
+            const handleClose = () => {
+                dialog.removeEventListener("close", handleClose);
+                resolve(dialog.returnValue === "send");
+            };
+
+            dialog.addEventListener("close", handleClose);
+            dialog.showModal();
+        });
     }
-
-    const shouldSendEmail = await new Promise((resolve) => {
-        const handleClose = () => {
-            dialog.removeEventListener("close", handleClose);
-            resolve(dialog.returnValue === "send");
-        };
-
-        dialog.addEventListener("close", handleClose);
-        dialog.showModal();
-    });
 
     if (!shouldSendEmail) {
         return false;
@@ -364,6 +373,12 @@ async function setupPage() {
     setupPasswordToggles();
 
     const page = document.body.dataset.page;
+    const sendVerificationButton = document.querySelector("#sendVerificationButton");
+    if (sendVerificationButton) {
+        sendVerificationButton.addEventListener("click", () => {
+            console.log("[verification] Send Verification Email button clicked");
+        });
+    }
 
     if (page === "login") {
         try {
@@ -399,6 +414,12 @@ async function setupPage() {
                     document.querySelector("#messageForm").requestSubmit();
                 }
             });
+
+            try {
+                await handleVerificationIfNeeded();
+            } catch (error) {
+                showBoardStatus(error.message || "Unable to send the verification email.");
+            }
 
             await loadMessages();
             window.setInterval(loadMessages, 5000);
@@ -488,7 +509,7 @@ async function setupPage() {
                     );
                 }
 
-                await promptVerificationIfNeeded();
+                await handleVerificationIfNeeded();
                 window.location.replace("index.html");
             } catch (error) {
                 showMessage(error.message || "Registration failed. Please try again.");
@@ -527,7 +548,7 @@ async function setupPage() {
                     throw new Error(getApiError(body, "Login failed."));
                 }
 
-                await promptVerificationIfNeeded();
+                await handleVerificationIfNeeded(false);
                 window.location.replace("index.html");
             } catch (error) {
                 showMessage(error.message || "Login failed. Please try again.");

@@ -40,5 +40,20 @@
         </section>
         <p class="board-status" id="formMessage" role="status" aria-live="polite"></p>
     </main>
+    <dialog class="verification-dialog" id="verificationDialog" aria-labelledby="verificationTitle"
+        aria-describedby="verificationDescription">
+        <form method="dialog">
+            <h2 id="verificationTitle">Verify your email address?</h2>
+            <p id="verificationDescription">
+                This account has not been verified. Would you like us to send a verification email?
+            </p>
+            <div class="verification-actions">
+                <button class="secondary-button" type="submit" value="not-now">Not Now</button>
+                <button class="submit-button" id="sendVerificationButton" type="submit" value="send">
+                    Send Verification Email
+                </button>
+            </div>
+        </form>
+    </dialog>
 </body>
 </html>
