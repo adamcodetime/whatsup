@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f7ff">
+    <title>Login | WhatsUp</title>
+    <link rel="stylesheet" href="auth.css">
+    <script src="index.js" defer></script>
+</head>
+<body data-page="login">
+    <main class="auth-card">
+        <a class="brand" href="login.html" aria-label="WhatsUp">
+            <span class="brand-mark" aria-hidden="true">W</span>
+            <span>WhatsUp</span>
+        </a>
+
+        <h1>Welcome back</h1>
+        <p class="intro">Log in to continue the conversation.</p>
+
+        <form id="loginForm" autocomplete="on" novalidate>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Your username"
+                        autocomplete="username" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="password-wrap">
+                        <input id="password" name="password" type="password" placeholder="Your password"
+                            autocomplete="current-password" required>
+                        <button class="toggle-password" type="button" aria-controls="password" aria-pressed="false">Show</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-button" id="submitButton" type="submit">Login</button>
+            <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+        <p class="auth-switch">Don't have an account? <a href="register.html">Register</a></p>
+    </main>
+    <dialog class="verification-dialog" id="verificationDialog" aria-labelledby="verificationTitle"
+        aria-describedby="verificationDescription">
+        <form method="dialog">
+            <h2 id="verificationTitle">Verify your email address?</h2>
+            <p id="verificationDescription">
+                This account has not been verified. Would you like us to send a verification email?
+            </p>
+            <div class="verification-actions">
+                <button class="secondary-button" type="submit" value="not-now">Not Now</button>
+                <button class="submit-button" type="submit" value="send">Send Email</button>
+            </div>
+        </form>
+    </dialog>
+</body>
+</html>

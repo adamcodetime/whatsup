@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10131b">
+    <title>Global Message Board | WhatsUp</title>
+    <link rel="stylesheet" href="auth.css">
+    <script src="index.js" defer></script>
+</head>
+<body data-page="board">
+    <main class="board-shell">
+        <header class="board-header">
+            <div>
+                <p class="board-eyebrow">WhatsUp</p>
+                <h1>Global Message Board</h1>
+                <p class="board-account">
+                    Logged in as: <strong id="loggedInUsername">…</strong>
+                    <span class="board-separator" aria-hidden="true">·</span>
+                    Verification status:
+                    <strong id="verificationStatus">…</strong>
+                </p>
+            </div>
+            <button class="board-logout" id="logoutButton" type="button">Logout</button>
+        </header>
+
+        <section class="board-panel" aria-label="Global messages">
+            <div class="message-list" id="messageList" aria-live="polite">
+                <p class="board-empty">Loading messages…</p>
+            </div>
+            <form class="message-composer" id="messageForm">
+                <label class="visually-hidden" for="messageInput">Write a message</label>
+                <input id="messageInput" name="content" type="text" maxlength="2000"
+                    placeholder="Write a message…" autocomplete="off" required>
+                <button class="board-send" id="sendButton" type="submit">Send</button>
+                <p class="verification-notice" id="verificationNotice" hidden>
+                    Email verification required before sending messages.
+                </p>
+            </form>
+        </section>
+        <p class="board-status" id="formMessage" role="status" aria-live="polite"></p>
+    </main>
+</body>
+</html>

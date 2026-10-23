@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f7ff">
+    <title>Create your account | WhatsUp</title>
+    <link rel="stylesheet" href="auth.css">
+    <script src="index.js" defer></script>
+</head>
+<body data-page="register">
+    <main class="auth-card">
+        <a class="brand" href="register.html" aria-label="WhatsUp home">
+            <span class="brand-mark" aria-hidden="true">W</span>
+            <span>WhatsUp</span>
+        </a>
+
+        <h1>Create your account</h1>
+        <p class="intro">Choose a username and password to get started.</p>
+
+        <form id="registrationForm" autocomplete="on" novalidate>
+            <div class="form-grid">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com"
+                        autocomplete="email" required>
+                </div>
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" placeholder="Choose a username"
+                        autocomplete="username" minlength="3" maxlength="24"
+                        pattern="[A-Za-z0-9_]{3,24}" aria-describedby="usernameHint" required>
+                    <p class="hint" id="usernameHint">3–24 characters: letters, numbers, and underscores.</p>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="password-wrap">
+                        <input id="password" name="password" type="password" placeholder="At least 12 characters"
+                            autocomplete="new-password" aria-describedby="passwordHint" required>
+                        <button class="toggle-password" type="button" aria-controls="password" aria-pressed="false">Show</button>
+                    </div>
+                    <p class="hint" id="passwordHint">At least 12 characters and no more than 1,024 UTF-8 bytes.</p>
+                </div>
+                <div class="field">
+                    <label for="confirmPassword">Confirm password</label>
+                    <div class="password-wrap">
+                        <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Enter it again"
+                            autocomplete="new-password" required>
+                        <button class="toggle-password" type="button" aria-controls="confirmPassword" aria-pressed="false">Show</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-button" id="submitButton" type="submit">Create account</button>
+            <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="login.html">Login</a></p>
+    </main>
+    <dialog class="verification-dialog" id="verificationDialog" aria-labelledby="verificationTitle"
+        aria-describedby="verificationDescription">
+        <form method="dialog">
+            <h2 id="verificationTitle">Verify your email address?</h2>
+            <p id="verificationDescription">
+                This account has not been verified. Would you like us to send a verification email?
+            </p>
+            <div class="verification-actions">
+                <button class="secondary-button" type="submit" value="not-now">Not Now</button>
+                <button class="submit-button" type="submit" value="send">Send Email</button>
+            </div>
+        </form>
+    </dialog>
+</body>
+</html>
