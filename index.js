@@ -120,7 +120,10 @@ function renderMessages(messages) {
             const meta = document.createElement("p");
             meta.className = "message-meta";
             const username = document.createElement("strong");
-            username.textContent = isOwnMessage ? "You" : (message.username || "Unknown");
+            const senderName = message.senderUsername || (typeof message.sender === "string"
+                ? message.sender
+                : message.sender?.username || message.sender?.name) || message.username;
+            username.textContent = isOwnMessage ? "You" : (senderName || "Unknown");
             const separator = document.createTextNode(" • ");
             const time = document.createElement("time");
             const timestamp = message.timestamp ?? message.createdAt ?? message.created_at;
